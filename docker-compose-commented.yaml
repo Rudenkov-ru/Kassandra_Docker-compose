@@ -1,0 +1,63 @@
+version: "3.9"
+services: 				
+  cassandra-1: 				
+    image: bitnami/cassandra:latest 	
+    environment:			
+      - CASSANDRA_SEEDS=cassandra-1 	
+      - CASSANDRA_PASSWORD_SEEDER=yes 	
+      - CASSANDRA_PASSWORD=12345 	
+    #ports:
+    #  - "7000:7000"
+    #  - "9042:9042"
+    volumes: 				
+      - ./cassandra-1:/bitnami		
+    networks:				
+      - cassandra			
+  cassandra-2:
+    image: bitnami/cassandra:latest
+    depends_on:
+      - cassandra-1
+    environment:
+      - CASSANDRA_SEEDS=cassandra-1
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=12345
+    #ports:
+    #  - "7001:7000"
+    #  - "9044:9042"
+    volumes:
+      - ./cassandra-2:/bitnami
+    networks:
+      - cassandra
+  cassandra-3:
+    image: bitnami/cassandra:latest
+    depends_on:
+      - cassandra-2
+    environment: 
+      - CASSANDRA_SEEDS=cassandra-1
+      - CASSANDRA_PASSWORD_SEEDER=no
+      - CASSANDRA_PASSWORD=12345
+    #ports:
+    #  - "7002:7000"
+    #  - "9045:9042"
+    volumes:
+      - ./cassandra-3:/bitnami
+    networks:
+      - cassandra
+networks:				
+  cassandra:
+    name: cassandra			
+volumes:				
+  cassandra-1:
+    driver: local			
+  cassandra-2:
+    driver: local
+  cassandra-3:
+    driver: local
+
+
+
+
+
+
+
+    
